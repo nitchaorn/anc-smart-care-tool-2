@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANC Smart Care Tool — รพ.แปลงยาว</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #fdf0f8;
+  --white:     #ffffff;
+  --pink1:     #f9a8d4;
+  --pink2:     #ec4899;
+  --pink3:     #be185d;
+  --pink-soft: #fce7f3;
+  --pink-mid:  #fbcfe8;
+  --blue1:     #bae6fd;
+  --blue2:     #38bdf8;
+  --blue3:     #0284c7;
+  --blue-soft: #e0f2fe;
+  --purple:    #a855f7;
+  --green:     #059669;
+  --yellow:    #d97706;
+  --red:       #dc2626;
+  --text:      #1e293b;
+  --text2:     #475569;
+  --muted:     #94a3b8;
+  --border:    #e2e8f0;
+  --border-p:  #f9a8d4;
+  --border-b:  #bae6fd;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:linear-gradient(135deg,#fdf0f8 0%,#f0f6ff 55%,#fdf4ff 100%);
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:'Sarabun',sans-serif;
+  min-height:100vh;
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#be185d 0%,#7c3aed 45%,#0284c7 100%);
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 80% at 15% 50%,rgba(255,255,255,0.13),transparent),
+             radial-gradient(ellipse 50% 60% at 85% 10%,rgba(255,255,255,0.09),transparent);
+}
+.header-inner{
+  max-width:1040px;margin:auto;
+  padding:22px 20px 18px;
+  position:relative;display:flex;align-items:center;gap:16px;
+}
+.logo-circle{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,0.22);
+  border:2px solid rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:25px;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+}
+.header-titles h1{
+  font-family:'Kanit',sans-serif;
+  font-size:1.45rem;font-weight:600;color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,0.18);
+}
+.header-titles p{font-size:0.77rem;color:rgba(255,255,255,0.75);margin-top:2px;}
+.header-badge{
+  margin-left:auto;
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.35);
+  border-radius:20px;padding:5px 14px;
+  font-size:0.72rem;color:#fff;white-space:nowrap;
+}
+
+/* TODAY BAR */
+.today-bar{
+  background:linear-gradient(90deg,#fce7f3,#e0f2fe,#fce7f3);
+  border-bottom:1px solid #f9a8d4;
+  padding:8px 0;
+}
+.today-bar-inner{
+  max-width:1040px;margin:auto;padding:0 20px;
+  display:flex;align-items:center;gap:0;flex-wrap:wrap;
+}
+.tb-item{
+  display:flex;align-items:center;gap:6px;
+  padding-right:16px;margin-right:16px;
+  border-right:1px solid #f9a8d4;
+  font-size:0.81rem;
+}
+.tb-item:last-child{border-right:none;}
+.tb-label{color:var(--pink3);font-weight:500;}
+.tb-val{color:var(--text);font-weight:700;}
+.tb-ga-pink{color:var(--pink2);}
+.tb-ga-blue{color:var(--blue3);}
+
+/* MAIN */
+.main{max-width:1040px;margin:auto;padding:22px 16px 60px;}
+
+/* TABS */
+.tabs{
+  display:flex;gap:4px;
+  background:#fff;border:1px solid var(--border-p);
+  border-radius:14px;padding:5px;
+  margin-bottom:22px;width:fit-content;
+  box-shadow:0 2px 10px rgba(236,72,153,0.08);
+}
+.tab-btn{
+  padding:8px 22px;border:none;border-radius:10px;
+  cursor:pointer;font-family:inherit;font-size:0.88rem;font-weight:500;
+  transition:all .2s;background:transparent;color:var(--muted);
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,var(--pink-soft),var(--blue-soft));
+  color:var(--pink3);
+  box-shadow:0 0 0 1.5px var(--pink1);
+}
+.tab-btn:hover:not(.active){background:#fdf0f8;color:var(--text);}
+
+.tab-pane{display:none;}
+.tab-pane.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* TWO PANEL */
+.two-panel{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px;
+}
+@media(max-width:700px){.two-panel{grid-template-columns:1fr;}}
+
+/* CARD */
+.card{
+  background:#fff;border-radius:18px;
+  border:1px solid var(--border);
+  padding:22px;
+  box-shadow:0 2px 14px rgba(236,72,153,0.07),0 1px 4px rgba(56,189,248,0.05);
+  margin-bottom:16px;
+}
+.card-pink{border-color:var(--border-p);background:linear-gradient(160deg,#fff 60%,#fff5fb 100%);}
+.card-blue{border-color:var(--border-b);background:linear-gradient(160deg,#fff 60%,#f0faff 100%);}
+
+/* PANEL HEADER */
+.panel-title{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.panel-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+}
+.pi-pink{background:linear-gradient(135deg,#fce7f3,#fbcfe8);}
+.pi-blue{background:linear-gradient(135deg,#e0f2fe,#bae6fd);}
+.panel-label{font-size:0.7rem;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;}
+.pl-pink{color:var(--pink2);}
+.pl-blue{color:var(--blue3);}
+.panel-name{font-size:0.96rem;font-weight:700;color:var(--text);margin-top:2px;}
+.panel-desc{font-size:0.76rem;color:var(--muted);margin-top:2px;}
+
+/* DATE INPUTS */
+.date-row{
+  display:grid;grid-template-columns:1.6fr 2.8fr 2.6fr;gap:8px;margin-bottom:14px;
+}
+.date-row label{display:block;font-size:0.76rem;color:var(--text2);font-weight:500;margin-bottom:5px;}
+.date-row select,.date-row input{
+  width:100%;
+  background:#f8fafc;border:1.5px solid var(--border);
+  border-radius:9px;padding:9px 8px;
+  color:var(--text);font-family:inherit;font-size:0.88rem;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  appearance:none;
+}
+.card-pink .date-row select:focus,.card-pink .date-row input:focus{
+  border-color:var(--pink2);box-shadow:0 0 0 3px rgba(236,72,153,0.1);
+}
+.card-blue .date-row select:focus,.card-blue .date-row input:focus{
+  border-color:var(--blue2);box-shadow:0 0 0 3px rgba(56,189,248,0.12);
+}
+
+/* NAT TOGGLE */
+.nat-row{display:flex;gap:8px;margin-bottom:14px;}
+.nat-btn{
+  flex:1;padding:7px 8px;border-radius:8px;
+  border:1.5px solid var(--border);background:#f8fafc;
+  color:var(--muted);cursor:pointer;font-family:inherit;
+  font-size:0.79rem;font-weight:500;text-align:center;transition:all .2s;
+}
+.nb-pink{border-color:var(--pink2);background:var(--pink-soft);color:var(--pink3);}
+.nb-blue{border-color:var(--blue2);background:var(--blue-soft);color:var(--blue3);}
+
+/* RESULT MINI */
+.result-mini{
+  display:none;
+  background:linear-gradient(135deg,#fce7f3,#e0f2fe);
+  border-radius:12px;padding:14px 16px;margin-bottom:0;
+  border:1px solid var(--pink1);
+  animation:fadeUp .3s ease;
+}
+.result-mini.show{display:block;}
+.rm-ga{
+  font-size:1.55rem;font-weight:800;
+  background:linear-gradient(90deg,var(--pink2),var(--blue3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1.15;
+}
+.rm-sub{font-size:0.75rem;color:var(--text2);margin-top:3px;}
+.rm-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.rm-chip{
+  background:#fff;border-radius:8px;padding:6px 11px;
+  font-size:0.76rem;border:1px solid var(--border);
+  color:var(--text2);
+}
+.rm-chip b{color:var(--text);font-weight:600;}
+
+/* ACTIVITIES PANEL */
+.acts-panel{display:none;animation:fadeUp .3s ease;}
+.acts-panel.show{display:block;}
+.acts-title{
+  font-size:0.74rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--green);
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.act-group{border-radius:11px;overflow:hidden;margin-bottom:8px;border:1px solid var(--border);}
+.act-group-hd{padding:9px 13px;font-size:0.79rem;font-weight:600;display:flex;align-items:center;gap:8px;}
+.act-group-bd{padding:6px 13px 10px;}
+.act-item{
+  display:flex;align-items:flex-start;gap:7px;
+  padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.04);
+  font-size:0.82rem;color:var(--text);
+}
+.act-item:last-child{border-bottom:none;}
+.act-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.no-act{font-size:0.82rem;color:var(--muted);padding:6px 0;}
+
+/* ALERTS */
+.alert-box{
+  background:#fffbeb;border:1px solid #fde68a;border-radius:9px;
+  padding:10px 13px;font-size:0.8rem;color:#854d0e;
+  margin-bottom:10px;display:flex;gap:8px;align-items:flex-start;
+}
+.alert-red{background:#fff1f2;border-color:#fca5a5;color:#991b1b;}
+
+/* FULL TIMELINE */
+.tl-item{
+  background:#fff;border:1px solid var(--border);
+  border-radius:12px;margin-bottom:8px;overflow:hidden;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.tl-hd{
+  padding:10px 16px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.tl-bd{padding:8px 16px 12px;}
+.tl-act-row{display:flex;gap:8px;align-items:flex-start;padding:4px 0;font-size:0.82rem;color:var(--text2);}
+
+/* ERROR */
+.err{color:var(--red);font-size:0.78rem;margin-top:5px;display:none;}
+
+/* SECTION DIVIDER */
+.section-divider{
+  height:1px;background:linear-gradient(90deg,transparent,var(--border-p),var(--border-b),transparent);
+  margin:12px 0;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;padding:16px 20px 28px;
+  font-size:0.72rem;color:var(--muted);
+  border-top:1px solid var(--border-p);
+  max-width:1040px;margin:auto;
+}
+
+/* CLEAR BUTTON */
+.clear-btn{
+  width:100%;margin-top:10px;
+  padding:11px;border:none;border-radius:10px;
+  cursor:pointer;font-family:inherit;font-size:0.9rem;font-weight:600;
+  transition:all .2s;
+  background:linear-gradient(135deg,#fee2e2,#fecaca);
+  color:#b91c1c;border:1.5px solid #fca5a5;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.clear-btn:hover{background:linear-gradient(135deg,#fca5a5,#f87171);color:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(239,68,68,0.25);}
+.clear-btn:active{transform:translateY(0);}
+
+/* NEXT APPOINTMENT */
+.next-appt-box{
+  background:linear-gradient(135deg,#f0fdf4,#ecfdf5);
+  border:1.5px solid #6ee7b7;
+  border-radius:12px;
+  padding:14px 16px;
+}
+.next-appt-box.blue-appt{
+  background:linear-gradient(135deg,#eff6ff,#e0f2fe);
+  border-color:#93c5fd;
+}
+.next-appt-title{
+  font-size:0.75rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:#059669;margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.next-appt-title.blue-title{color:#0284c7;}
+.next-date-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;
+}
+.next-date-badge{
+  background:linear-gradient(135deg,#059669,#0d9488);
+  color:#fff;border-radius:10px;
+  padding:8px 16px;font-size:1.1rem;font-weight:800;
+  box-shadow:0 2px 8px rgba(5,150,105,0.25);
+  white-space:nowrap;
+}
+.next-date-badge.blue-badge{
+  background:linear-gradient(135deg,#0284c7,#0ea5e9);
+  box-shadow:0 2px 8px rgba(2,132,199,0.25);
+}
+.next-ga-info{font-size:0.8rem;color:#475569;}
+.next-acts-list{margin-top:6px;}
+.next-act-row{
+  display:flex;align-items:flex-start;gap:7px;
+  padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.05);
+  font-size:0.82rem;color:#1e293b;
+}
+.next-act-row:last-child{border-bottom:none;}
+.next-act-dot{
+  width:6px;height:6px;border-radius:50%;
+  margin-top:6px;flex-shrink:0;background:#059669;
+}
+.next-act-dot.blue-dot{background:#0284c7;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--pink1);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-circle">🤰</div>
+    <div class="header-titles">
+      <h1>ANC Smart Care Tool</h1>
+      <p style="font-size:0.85rem;font-weight:600;color:rgba(255,255,255,0.95);margin-top:1px;">คลินิกฝากครรภ์ โรงพยาบาลแปลงยาว</p>
+      <p>ระบบคำนวณอายุครรภ์และแนะนำกิจกรรมการดูแล</p>
+    </div>
+    <div class="header-badge">ฝากครรภ์ 8 ครั้งคุณภาพ</div>
+  </div>
+</div>
+
+<!-- TODAY BAR -->
+<div class="today-bar">
+  <div class="today-bar-inner">
+    <div class="tb-item">
+      <span>🗓️</span>
+      <span class="tb-label">วันนี้</span>
+      <span class="tb-val" id="bar-today">—</span>
+    </div>
+    <div class="tb-item" id="lmp-bar-wrap" style="display:none">
+      <span>🩷</span>
+      <span class="tb-label">GA วันนี้ (LMP)</span>
+      <span class="tb-val tb-ga-pink" id="lmp-bar-ga">—</span>
+    </div>
+    <div class="tb-item" id="edc-bar-wrap" style="display:none">
+      <span>💙</span>
+      <span class="tb-label">GA วันนี้ (EDC)</span>
+      <span class="tb-val tb-ga-blue" id="edc-bar-ga">—</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('calc')">🧮 คำนวณอายุครรภ์</button>
+    <button class="tab-btn" onclick="switchTab('timeline')">📋 ตารางนัด ANC</button>
+  </div>
+
+  <!-- TAB CALC -->
+  <div id="tab-calc" class="tab-pane active">
+    <div class="two-panel">
+
+      <!-- ══ ฝั่งซ้าย: LMP → EDC ══ -->
+      <div>
+        <div class="card card-pink">
+          <div class="panel-title">
+            <div class="panel-icon pi-pink">🩷</div>
+            <div>
+              <div class="panel-label pl-pink">กรอก LMP → คำนวณ EDC</div>
+              <div class="panel-name">วันแรกของประจำเดือนครั้งสุดท้าย</div>
+              <div class="panel-desc">ระบบจะคำนวณ EDC + อายุครรภ์ให้อัตโนมัติ</div>
+            </div>
+          </div>
+
+          <div class="date-row">
+            <div>
+              <label>วัน</label>
+              <select id="lmp-d" onchange="onLmpChange()"><option value="">วัน</option></select>
+            </div>
+            <div>
+              <label>เดือน</label>
+              <select id="lmp-m" onchange="onLmpChange()"><option value="">เดือน</option></select>
+            </div>
+            <div>
+              <label>ปี พ.ศ.</label>
+              <select id="lmp-y" onchange="onLmpChange()"><option value="">ปี พ.ศ.</option></select>
+            </div>
+          </div>
+
+          <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;font-weight:600;">👤 สัญชาติ</div>
+          <div class="nat-row">
+            <button class="nat-btn nb-pink" id="lnat-thai"  onclick="setNat('lmp','thai')">🇹🇭 คนไทย</button>
+            <button class="nat-btn"          id="lnat-alien" onclick="setNat('lmp','alien')">🌏 ต่างด้าว</button>
+          </div>
+
+          <button class="clear-btn" onclick="clearPanel('lmp')">🗑️ ล้างข้อมูล / คำนวณคนต่อไป</button>
+
+          <div class="err" id="lmp-err">⚠️ กรุณากรอกวันที่ให้ครบถ้วนและถูกต้อง</div>
+
+          <!-- LMP RESULT -->
+          <div class="result-mini" id="lmp-result">
+            <div class="rm-ga" id="lmp-ga-text">—</div>
+            <div class="rm-sub" id="lmp-ga-sub"></div>
+            <div class="rm-row">
+              <div class="rm-chip">📅 EDC : <b id="lmp-edc-val">—</b></div>
+              <div class="rm-chip">⏳ เหลือ : <b id="lmp-remain-val">—</b></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LMP ACTIVITIES -->
+        <div class="card card-pink acts-panel" id="lmp-acts-panel">
+          <div class="acts-title">✅ กิจกรรมที่ต้องทำ ณ อายุครรภ์นี้</div>
+          <div id="lmp-acts-container"></div>
+          <div id="lmp-next-appt" style="display:none;margin-top:14px;"></div>
+        </div>
+      </div>
+
+      <!-- ══ ฝั่งขวา: EDC → LMP ══ -->
+      <div>
+        <div class="card card-blue">
+          <div class="panel-title">
+            <div class="panel-icon pi-blue">💙</div>
+            <div>
+              <div class="panel-label pl-blue">กรอก EDC → คำนวณ LMP</div>
+              <div class="panel-name">วันกำหนดคลอด (Expected Due Date)</div>
+              <div class="panel-desc">ระบบจะคำนวณ LMP + อายุครรภ์ให้อัตโนมัติ</div>
+            </div>
+          </div>
+
+          <div class="date-row">
+            <div>
+              <label>วัน</label>
+              <select id="edc-d" onchange="onEdcChange()"><option value="">วัน</option></select>
+            </div>
+            <div>
+              <label>เดือน</label>
+              <select id="edc-m" onchange="onEdcChange()"><option value="">เดือน</option></select>
+            </div>
+            <div>
+              <label>ปี พ.ศ.</label>
+              <select id="edc-y" onchange="onEdcChange()"><option value="">ปี พ.ศ.</option></select>
+            </div>
+          </div>
+
+          <div style="font-size:0.75rem;color:var(--text2);margin-bottom:8px;font-weight:600;">👤 สัญชาติ</div>
+          <div class="nat-row">
+            <button class="nat-btn nb-blue" id="rnat-thai"  onclick="setNat('edc','thai')">🇹🇭 คนไทย</button>
+            <button class="nat-btn"          id="rnat-alien" onclick="setNat('edc','alien')">🌏 ต่างด้าว</button>
+          </div>
+
+          <button class="clear-btn" onclick="clearPanel('edc')">🗑️ ล้างข้อมูล / คำนวณคนต่อไป</button>
+
+          <div class="err" id="edc-err">⚠️ กรุณากรอกวันที่ให้ครบถ้วนและถูกต้อง</div>
+
+          <!-- EDC RESULT -->
+          <div class="result-mini" id="edc-result"
+               style="border-color:var(--blue1);background:linear-gradient(135deg,var(--blue-soft),var(--pink-soft))">
+            <div class="rm-ga" id="edc-ga-text">—</div>
+            <div class="rm-sub" id="edc-ga-sub"></div>
+            <div class="rm-row">
+              <div class="rm-chip">📅 LMP : <b id="edc-lmp-val">—</b></div>
+              <div class="rm-chip">⏳ เหลือ : <b id="edc-remain-val">—</b></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDC ACTIVITIES -->
+        <div class="card card-blue acts-panel" id="edc-acts-panel">
+          <div class="acts-title" style="color:var(--blue3);">✅ กิจกรรมที่ต้องทำ ณ อายุครรภ์นี้</div>
+          <div id="edc-acts-container"></div>
+          <div id="edc-next-appt" style="display:none;margin-top:14px;"></div>
+        </div>
+      </div>
+
+    </div><!-- /two-panel -->
+  </div><!-- /tab-calc -->
+
+  <!-- TAB TIMELINE -->
+  <div id="tab-timeline" class="tab-pane">
+    <div class="card">
+      <div style="font-size:0.95rem;font-weight:700;color:var(--pink3);margin-bottom:3px;">
+        📋 ตารางฝากครรภ์ 8 ครั้งคุณภาพ
+      </div>
+      <div style="font-size:0.79rem;color:var(--muted);margin-bottom:18px;">
+        โรงพยาบาลแปลงยาว — กิจกรรมการดูแลตามช่วงอายุครรภ์ทั้งหมด
+      </div>
+      <div id="full-timeline"></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  จัดทำโดย : <strong style="color:var(--pink2)">นิชนารถ ปานอ่ำ</strong>
+  พยาบาลวิชาชีพชำนาญการ งานผู้ป่วยนอก โรงพยาบาลแปลงยาว<br>
+  <span style="font-size:0.67rem;margin-top:3px;display:block;">
+    ANC Smart Care Tool v2.0 — อ้างอิงตารางนัด ANC รพ.แปลงยาว ปรับปรุง 27 ม.ค. 2569
+  </span>
+</div>
+
+<script>
+// ============================================================
+//  CONSTANTS
+// ============================================================
+const MONTHS_TH = [
+  'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+  'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'
+];
+const MONTHS_SHORT = [
+  'ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.',
+  'ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'
+];
+
+// ============================================================
+//  ANC ACTIVITIES DATA
+// ============================================================
+const ANC = [
+  { range:'< 12 สัปดาห์',           minW:0,  maxW:11, maxD:6,
+    color:'#ec4899', bg:'#fce7f3', border:'#f9a8d4',
+    acts:[
+      {t:'LAB I + ฉีด dT ครั้งที่ 1',                    thai:true,  alien:false},
+      {t:'LAB I (ไม่ฉีด dT)',                              thai:false, alien:true},
+      {t:'U/S for corrected EDC',                          thai:true,  alien:true},
+      {t:'GCT in high risk (ตรวจน้ำตาลกลุ่มเสี่ยง)',      thai:true,  alien:true},
+    ]
+  },
+  { range:'12+1 – 17+5 สัปดาห์',   minW:12, minD:1, maxW:17, maxD:5,
+    color:'#a855f7', bg:'#faf5ff', border:'#d8b4fe',
+    acts:[
+      {t:'เจาะ NIPT (ยินยอมชำระเงิน 2,600 บาท)',          thai:true,  alien:true},
+    ]
+  },
+  { range:'15 – 17+5 สัปดาห์',     minW:15, maxW:17, maxD:5,
+    color:'#db2777', bg:'#fdf2f8', border:'#fbcfe8',
+    acts:[
+      {t:'เจาะ QT (ยินยอมชำระเงิน 1,300 บาท) — ต่างด้าว', thai:false, alien:true},
+    ]
+  },
+  { range:'18 – 22 สัปดาห์',       minW:18, maxW:22,
+    color:'#0284c7', bg:'#e0f2fe', border:'#bae6fd',
+    acts:[
+      {t:'U/S Cervix (อัลตราซาวด์ปากมดลูก)',                thai:true,  alien:true},
+      {t:'💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย',          thai:true,  alien:false},
+    ]
+  },
+  { range:'24 – 28 สัปดาห์',       minW:24, maxW:28,
+    color:'#d97706', bg:'#fffbeb', border:'#fde68a',
+    acts:[
+      {t:'เจาะ GCT / OGTT (คัดกรองเบาหวาน)',                        thai:true,  alien:true},
+      {t:'💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย',                  thai:true,  alien:false},
+    ]
+  },
+  { range:'28 – 32 สัปดาห์',       minW:28, maxW:32,
+    color:'#0891b2', bg:'#ecfeff', border:'#a5f3fc',
+    acts:[
+      {t:'Repeat LAB II',                                                     thai:true, alien:true},
+      {t:'เข้าโรงเรียนพ่อแม่ครั้งที่ 2 / เยี่ยมชมห้องคลอด',               thai:true, alien:true},
+      {t:'💉 ฉีดวัคซีน aP (ไอกรน) — คนไทย',                                thai:true, alien:false},
+      {t:'💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย (ถ้ายังไม่ได้ฉีด)',      thai:true, alien:false},
+      {t:'GDM GA ≥ 32 สัปดาห์ → ส่ง NST ทุก visit',                        thai:true, alien:true, dm:true},
+    ]
+  },
+  { range:'35 – 36 สัปดาห์',       minW:35, maxW:36,
+    color:'#be185d', bg:'#fff1f2', border:'#fecdd3',
+    acts:[
+      {t:'U/S ส่วนนำ (ตรวจท่าทารก)',                      thai:true, alien:true},
+    ]
+  },
+  { range:'37 – 37+6 สัปดาห์',     minW:37, maxW:37, maxD:6,
+    color:'#7c3aed', bg:'#f5f3ff', border:'#c4b5fd',
+    acts:[
+      {t:'ประเมิน Risk ก่อนคลอด / Refer',                  thai:true, alien:true},
+    ]
+  },
+  { range:'38 – 38+6 สัปดาห์',     minW:38, maxW:38, maxD:6,
+    color:'#059669', bg:'#ecfdf5', border:'#a7f3d0',
+    acts:[
+      {t:'PV กระตุ้น',                                      thai:true, alien:true},
+    ]
+  },
+  { range:'39 – 39+6 สัปดาห์',     minW:39, maxW:39, maxD:6,
+    color:'#0369a1', bg:'#f0f9ff', border:'#bae6fd',
+    acts:[
+      {t:'PV กระตุ้น + ประเมิน Bishop Score + NST',         thai:true, alien:true},
+    ]
+  },
+  { range:'40 – 40+4 สัปดาห์',     minW:40, maxW:40, maxD:4,
+    color:'#dc2626', bg:'#fff1f2', border:'#fca5a5',
+    acts:[
+      {t:'PV กระตุ้น + ประเมิน Bishop Score + NST',         thai:true, alien:true},
+      {t:'🔴 นัด Induction of Labor (กระตุ้นคลอด)',          thai:true, alien:true},
+    ]
+  },
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+let lmpNat = 'thai';
+let edcNat = 'thai';
+
+// ============================================================
+//  INIT
+// ============================================================
+window.onload = function() {
+  populateSelects('lmp-d','lmp-m','lmp-y');
+  populateSelects('edc-d','edc-m','edc-y');
+  updateTodayBar();
+  buildFullTimeline();
+};
+
+function populateSelects(dayId, monId, yearId) {
+  const dSel = document.getElementById(dayId);
+  const mSel = document.getElementById(monId);
+  const ySel = document.getElementById(yearId);
+  for (let d=1;d<=31;d++) {
+    const o = document.createElement('option');
+    o.value=d; o.textContent=d; dSel.appendChild(o);
+  }
+  MONTHS_TH.forEach((mn,i) => {
+    const o = document.createElement('option');
+    o.value=i+1; o.textContent=mn; mSel.appendChild(o);
+  });
+  // ปี พ.ศ. 2560–2575 (ครอบคลุมช่วงฝากครรภ์ปัจจุบันและอนาคตใกล้)
+  const thisYearBE = new Date().getFullYear() + 543;
+  for (let y = thisYearBE - 2; y <= thisYearBE + 1; y++) {
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y;
+    ySel.appendChild(o);
+  }
+}
+
+// ============================================================
+//  TAB SWITCH
+// ============================================================
+function switchTab(t) {
+  ['calc','timeline'].forEach((n,i) => {
+    document.getElementById('tab-'+n).classList.toggle('active', n===t);
+    document.querySelectorAll('.tab-btn')[i].classList.toggle('active', n===t);
+  });
+}
+
+// ============================================================
+//  CLEAR PANEL
+// ============================================================
+function clearPanel(panel) {
+  if (panel==='lmp') {
+    // reset selects & input
+    document.getElementById('lmp-d').value = '';
+    document.getElementById('lmp-m').value = '';
+    document.getElementById('lmp-y').value = '';
+    // reset nationality to thai
+    lmpNat = 'thai';
+    document.getElementById('lnat-thai').className  = 'nat-btn nb-pink';
+    document.getElementById('lnat-alien').className = 'nat-btn';
+    // hide results
+    document.getElementById('lmp-result').classList.remove('show');
+    document.getElementById('lmp-acts-panel').classList.remove('show');
+    document.getElementById('lmp-next-appt').style.display = 'none';
+    document.getElementById('lmp-next-appt').innerHTML = '';
+    document.getElementById('lmp-err').style.display = 'none';
+    document.getElementById('lmp-bar-wrap').style.display = 'none';
+  } else {
+    document.getElementById('edc-d').value = '';
+    document.getElementById('edc-m').value = '';
+    document.getElementById('edc-y').value = '';
+    edcNat = 'thai';
+    document.getElementById('rnat-thai').className  = 'nat-btn nb-blue';
+    document.getElementById('rnat-alien').className = 'nat-btn';
+    document.getElementById('edc-result').classList.remove('show');
+    document.getElementById('edc-acts-panel').classList.remove('show');
+    document.getElementById('edc-next-appt').style.display = 'none';
+    document.getElementById('edc-next-appt').innerHTML = '';
+    document.getElementById('edc-err').style.display = 'none';
+    document.getElementById('edc-bar-wrap').style.display = 'none';
+  }
+  // scroll to top of the panel smoothly
+  document.querySelector('.two-panel').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ============================================================
+//  NATIONALITY
+// ============================================================
+function setNat(panel, nat) {
+  if (panel==='lmp') {
+    lmpNat = nat;
+    document.getElementById('lnat-thai').className  = 'nat-btn'+(nat==='thai'?' nb-pink':'');
+    document.getElementById('lnat-alien').className = 'nat-btn'+(nat==='alien'?' nb-pink':'');
+    onLmpChange();
+  } else {
+    edcNat = nat;
+    document.getElementById('rnat-thai').className  = 'nat-btn'+(nat==='thai'?' nb-blue':'');
+    document.getElementById('rnat-alien').className = 'nat-btn'+(nat==='alien'?' nb-blue':'');
+    onEdcChange();
+  }
+}
+
+// ============================================================
+//  DATE HELPERS
+// ============================================================
+function addDays(d,n){ return new Date(d.getTime()+n*86400000); }
+function diffDays(a,b){ return Math.round((b-a)/86400000); }
+
+// แปลง วัน/เดือน/ปี พ.ศ. → JavaScript Date (ค.ศ.)
+function beDateToJS(day,mon,yBE) {
+  return new Date(yBE-543, mon-1, day);
+}
+
+function formatTH(dt) {
+  if (!dt||isNaN(dt)) return '—';
+  return `${dt.getDate()} ${MONTHS_SHORT[dt.getMonth()]} ${dt.getFullYear()+543}`;
+}
+
+function gaWeeksDays(lmp, ref) {
+  const total = diffDays(lmp, ref);
+  return { total, weeks:Math.floor(total/7), days:total%7 };
+}
+
+function gaInRange(w,d,r) {
+  const t = w*7+d;
+  const mn = (r.minW||0)*7+(r.minD||0);
+  const mx = r.maxD!==undefined ? r.maxW*7+r.maxD : (r.maxW!==undefined ? r.maxW*7+6 : 9999);
+  return t>=mn && t<=mx;
+}
+
+function remainText(days) {
+  if (days>0) return `${days} วัน`;
+  if (days===0) return '🎉 วันนี้!';
+  return `เกิน ${Math.abs(days)} วัน`;
+}
+
+// ============================================================
+//  TODAY BAR
+// ============================================================
+function updateTodayBar() {
+  document.getElementById('bar-today').textContent = formatTH(new Date());
+}
+
+function updateLiveBars() {
+  const now = new Date();
+
+  // LMP side
+  const ld=parseInt(document.getElementById('lmp-d').value);
+  const lm=parseInt(document.getElementById('lmp-m').value);
+  const ly=parseInt(document.getElementById('lmp-y').value);
+  if (ld&&lm&&ly>=2540&&ly<=2600) {
+    const lmp = beDateToJS(ld,lm,ly);
+    if (!isNaN(lmp)&&lmp.getDate()===ld&&lmp<=now) {
+      const {weeks,days}=gaWeeksDays(lmp,now);
+      document.getElementById('lmp-bar-ga').textContent=`${weeks} สัปดาห์ ${days} วัน`;
+      document.getElementById('lmp-bar-wrap').style.display='flex';
+    } else {
+      document.getElementById('lmp-bar-wrap').style.display='none';
+    }
+  } else {
+    document.getElementById('lmp-bar-wrap').style.display='none';
+  }
+
+  // EDC side
+  const ed=parseInt(document.getElementById('edc-d').value);
+  const em=parseInt(document.getElementById('edc-m').value);
+  const ey=parseInt(document.getElementById('edc-y').value);
+  if (ed&&em&&ey>=2540&&ey<=2600) {
+    const edc=beDateToJS(ed,em,ey);
+    if (!isNaN(edc)&&edc.getDate()===ed) {
+      const lmp2=addDays(edc,-280);
+      const {weeks,days}=gaWeeksDays(lmp2,now);
+      if (weeks>=0&&weeks<=44) {
+        document.getElementById('edc-bar-ga').textContent=`${weeks} สัปดาห์ ${days} วัน`;
+        document.getElementById('edc-bar-wrap').style.display='flex';
+      } else {
+        document.getElementById('edc-bar-wrap').style.display='none';
+      }
+    } else {
+      document.getElementById('edc-bar-wrap').style.display='none';
+    }
+  } else {
+    document.getElementById('edc-bar-wrap').style.display='none';
+  }
+}
+
+// ============================================================
+//  LMP PANEL LOGIC
+// ============================================================
+function onLmpChange() {
+  const d=parseInt(document.getElementById('lmp-d').value);
+  const m=parseInt(document.getElementById('lmp-m').value);
+  const y=parseInt(document.getElementById('lmp-y').value);
+  const errEl=document.getElementById('lmp-err');
+  const resultEl=document.getElementById('lmp-result');
+  const panelEl=document.getElementById('lmp-acts-panel');
+
+  resultEl.classList.remove('show');
+  panelEl.classList.remove('show');
+  errEl.style.display='none';
+
+  if (!d||!m||!y) { updateLiveBars(); return; }
+  if (y<2540||y>2600) { errEl.textContent='⚠️ ปี พ.ศ. ไม่ถูกต้อง'; errEl.style.display='block'; updateLiveBars(); return; }
+
+  const lmp = beDateToJS(d,m,y);
+  if (isNaN(lmp.getTime())||lmp.getDate()!==d) {
+    errEl.textContent='⚠️ วันที่ไม่ถูกต้องในเดือนนี้'; errEl.style.display='block'; updateLiveBars(); return;
+  }
+
+  const now = new Date();
+  const {total,weeks,days} = gaWeeksDays(lmp,now);
+  if (total<0) {
+    errEl.textContent='⚠️ LMP อยู่ในอนาคต กรุณาตรวจสอบ'; errEl.style.display='block'; updateLiveBars(); return;
+  }
+  if (weeks>44) {
+    errEl.textContent='⚠️ อายุครรภ์มากกว่า 44 สัปดาห์ กรุณาตรวจสอบ'; errEl.style.display='block'; updateLiveBars(); return;
+  }
+
+  const edc    = addDays(lmp,280);
+  const remain = diffDays(now,edc);
+
+  document.getElementById('lmp-ga-text').textContent = `${weeks} สัปดาห์ ${days} วัน`;
+  document.getElementById('lmp-ga-sub').textContent  = `(รวม ${total} วัน นับจาก LMP — ณ วันที่ ${formatTH(now)})`;
+  document.getElementById('lmp-edc-val').textContent   = formatTH(edc);
+  document.getElementById('lmp-remain-val').textContent = remainText(remain);
+  resultEl.classList.add('show');
+
+  buildActsPanel('lmp-acts-container','lmp-acts-panel', weeks, days, lmpNat);
+  buildNextAppt('lmp-next-appt', weeks, days, lmp, false);
+  updateLiveBars();
+}
+
+// ============================================================
+//  EDC PANEL LOGIC
+// ============================================================
+function onEdcChange() {
+  const d=parseInt(document.getElementById('edc-d').value);
+  const m=parseInt(document.getElementById('edc-m').value);
+  const y=parseInt(document.getElementById('edc-y').value);
+  const errEl=document.getElementById('edc-err');
+  const resultEl=document.getElementById('edc-result');
+  const panelEl=document.getElementById('edc-acts-panel');
+
+  resultEl.classList.remove('show');
+  panelEl.classList.remove('show');
+  errEl.style.display='none';
+
+  if (!d||!m||!y) { updateLiveBars(); return; }
+  if (y<2540||y>2600) { errEl.textContent='⚠️ ปี พ.ศ. ไม่ถูกต้อง'; errEl.style.display='block'; updateLiveBars(); return; }
+
+  const edc = beDateToJS(d,m,y);
+  if (isNaN(edc.getTime())||edc.getDate()!==d) {
+    errEl.textContent='⚠️ วันที่ไม่ถูกต้องในเดือนนี้'; errEl.style.display='block'; updateLiveBars(); return;
+  }
+
+  const now  = new Date();
+  const lmp  = addDays(edc,-280);
+  const {total,weeks,days} = gaWeeksDays(lmp,now);
+
+  if (total<0) {
+    errEl.textContent='⚠️ อายุครรภ์ติดลบ — EDC อาจผ่านไปนานแล้ว'; errEl.style.display='block'; updateLiveBars(); return;
+  }
+  if (weeks>44) {
+    errEl.textContent='⚠️ อายุครรภ์มากกว่า 44 สัปดาห์ กรุณาตรวจสอบ'; errEl.style.display='block'; updateLiveBars(); return;
+  }
+
+  const remain = diffDays(now,edc);
+
+  document.getElementById('edc-ga-text').textContent = `${weeks} สัปดาห์ ${days} วัน`;
+  document.getElementById('edc-ga-sub').textContent  = `(รวม ${total} วัน นับจาก LMP — ณ วันที่ ${formatTH(now)})`;
+  document.getElementById('edc-lmp-val').textContent   = formatTH(lmp);
+  document.getElementById('edc-remain-val').textContent = remainText(remain);
+  resultEl.classList.add('show');
+
+  buildActsPanel('edc-acts-container','edc-acts-panel', weeks, days, edcNat);
+  buildNextAppt('edc-next-appt', weeks, days, lmp, true);
+  updateLiveBars();
+}
+
+// ============================================================
+//  BUILD ACTIVITIES
+// ============================================================
+function buildActsPanel(containerId, panelId, weeks, days, nat) {
+  const container = document.getElementById(containerId);
+  const panel     = document.getElementById(panelId);
+  container.innerHTML='';
+
+  let hasContent=false;
+
+  // Alerts
+  if (weeks>=41) {
+    container.innerHTML+=`<div class="alert-box alert-red">🚨 <b>เกิน 41 สัปดาห์</b> — ควรพิจารณา Induction ทันที โปรดปรึกษาแพทย์</div>`;
+    hasContent=true;
+  } else if (weeks>=40) {
+    container.innerHTML+=`<div class="alert-box">⚠️ <b>อายุครรภ์ครบกำหนด 40 สัปดาห์</b> — ควรนัด Induction of Labor</div>`;
+    hasContent=true;
+  }
+
+  const matched = ANC.filter(r => gaInRange(weeks,days,r));
+
+  matched.forEach(r => {
+    const acts = r.acts.filter(a => nat==='thai' ? a.thai : a.alien);
+    if (!acts.length) return;
+    hasContent=true;
+    const g = document.createElement('div');
+    g.className='act-group';
+    g.style.borderColor=r.border;
+    g.innerHTML=`
+      <div class="act-group-hd" style="background:${r.bg};color:${r.color};">
+        <span>📌</span><span>${r.range}</span>
+      </div>
+      <div class="act-group-bd">
+        ${acts.map(a=>`
+          <div class="act-item">
+            <div class="act-dot" style="background:${r.color}"></div>
+            <span style="color:${a.dm?'#b45309':'inherit'}">${a.t}</span>
+          </div>`).join('')}
+      </div>`;
+    container.appendChild(g);
+  });
+
+  // GDM reminder ≥32 weeks
+  if (weeks>=32) {
+    const note=document.createElement('div');
+    note.style.cssText='background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:10px 13px;font-size:0.79rem;color:#854d0e;display:flex;gap:8px;margin-top:6px;';
+    note.innerHTML='<span>📋</span><span><b>GDM reminder:</b> หากเป็นเบาหวานขณะตั้งครรภ์ → ส่ง NST ทุก visit ตั้งแต่ GA 32 สัปดาห์ขึ้นไป</span>';
+    container.appendChild(note); hasContent=true;
+  }
+
+  if (!hasContent) {
+    container.innerHTML='<div class="no-act">ไม่มีกิจกรรมเฉพาะช่วงนี้ — ดูแลตามมาตรฐานปกติ</div>';
+  }
+  panel.classList.add('show');
+}
+
+// ============================================================
+//  ตารางนัด ANC รพ.แปลงยาว — ทุกครั้งมีวันนัดจริง (นับจาก LMP)
+//  nextAtW = สัปดาห์ที่นับจาก LMP ที่ควรมานัดครั้งต่อไป
+// ============================================================
+const VISIT_SCHEDULE = [
+  {
+    visitNo: 1,
+    gaRange: '< 12 สัปดาห์',
+    fromW: 0, toW: 11, toD: 6,
+    nextAtW: 12, nextAtD: 1,          // ≥ 12+1 สัปดาห์
+    nextLabel: 'ครั้งที่ 2  —  GA 12+1 สัปดาห์',
+    nextActs: [
+      'เจาะ NIPT (ถ้ายินยอมชำระเงิน 2,600 บาท)',
+      'ตรวจครรภ์ตามมาตรฐาน',
+      'ติดตามผลตรวจ LAB I',
+    ]
+  },
+  {
+    visitNo: 2,
+    gaRange: '12+1 – 17+5 สัปดาห์',
+    fromW: 12, fromD: 1, toW: 17, toD: 5,
+    nextAtW: 18, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 3  —  GA 18 สัปดาห์',
+    nextActs: [
+      'U/S Cervix (อัลตราซาวด์ปากมดลูก)',
+      '💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย',
+      'ตรวจครรภ์ตามมาตรฐาน',
+    ]
+  },
+  {
+    visitNo: 3,
+    gaRange: '18 – 22 สัปดาห์',
+    fromW: 18, toW: 22,
+    nextAtW: 24, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 4  —  GA 24 สัปดาห์',
+    nextActs: [
+      'เจาะ GCT / OGTT (คัดกรองเบาหวาน)',
+      '💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย (ถ้ายังไม่ได้ฉีด)',
+      'ตรวจครรภ์ตามมาตรฐาน',
+    ]
+  },
+  {
+    visitNo: 4,
+    gaRange: '24 – 27+6 สัปดาห์',
+    fromW: 24, toW: 27, toD: 6,
+    nextAtW: 28, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 5  —  GA 28 สัปดาห์',
+    nextActs: [
+      'Repeat LAB II',
+      '💉 ฉีดวัคซีน aP (ป้องกันไอกรน) — คนไทย',
+      '💉 ฉีดวัคซีน Flu (ถ้ายังไม่ได้ฉีด) — คนไทย',
+      'เข้าโรงเรียนพ่อแม่ครั้งที่ 2 / เยี่ยมชมห้องคลอด',
+      'GDM → เริ่ม NST ทุก visit ตั้งแต่ GA 32 สัปดาห์',
+    ]
+  },
+  {
+    visitNo: 5,
+    gaRange: '28 – 34+6 สัปดาห์',
+    fromW: 28, toW: 34, toD: 6,
+    nextAtW: 35, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 6  —  GA 35 สัปดาห์',
+    nextActs: [
+      'U/S ส่วนนำ (ตรวจท่าทารก)',
+      'ตรวจครรภ์ตามมาตรฐาน',
+      'GDM → NST ทุก visit',
+    ]
+  },
+  {
+    visitNo: 6,
+    gaRange: '35 – 36+6 สัปดาห์',
+    fromW: 35, toW: 36, toD: 6,
+    nextAtW: 37, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 7  —  GA 37 สัปดาห์',
+    nextActs: [
+      'ประเมิน Risk ก่อนคลอด / Refer',
+      'ตรวจครรภ์ตามมาตรฐาน',
+    ]
+  },
+  {
+    visitNo: 7,
+    gaRange: '37 – 37+6 สัปดาห์',
+    fromW: 37, toW: 37, toD: 6,
+    nextAtW: 38, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 8  —  GA 38 สัปดาห์',
+    nextActs: [
+      'PV กระตุ้น',
+      'ตรวจครรภ์ตามมาตรฐาน',
+    ]
+  },
+  {
+    visitNo: 8,
+    gaRange: '38 – 38+6 สัปดาห์',
+    fromW: 38, toW: 38, toD: 6,
+    nextAtW: 39, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 9  —  GA 39 สัปดาห์',
+    nextActs: [
+      'PV กระตุ้น + ประเมิน Bishop Score + NST',
+    ]
+  },
+  {
+    visitNo: 9,
+    gaRange: '39 – 39+6 สัปดาห์',
+    fromW: 39, toW: 39, toD: 6,
+    nextAtW: 40, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 10  —  GA 40 สัปดาห์',
+    nextActs: [
+      'PV กระตุ้น + ประเมิน Bishop Score + NST',
+      '🔴 นัด Induction of Labor (ถ้าไม่คลอด)',
+    ]
+  },
+  {
+    visitNo: 10,
+    gaRange: '40 สัปดาห์ขึ้นไป',
+    fromW: 40, toW: 99,
+    nextAtW: null,
+    nextLabel: null,
+    nextActs: []
+  },
+];
+
+// คืนค่า visit ปัจจุบัน + ข้อมูลนัดครั้งต่อไป
+function getVisitInfo(weeks, days, lmp) {
+  const totalD = weeks * 7 + days;
+  for (const v of VISIT_SCHEDULE) {
+    const fromD = (v.fromW || 0) * 7 + (v.fromD || 0);
+    const toD   = v.toD !== undefined
+      ? v.toW * 7 + v.toD
+      : (v.toW !== undefined ? v.toW * 7 + 6 : 99999);
+    if (totalD >= fromD && totalD <= toD) {
+      if (v.nextAtW === null) return { visitNo: v.visitNo, nextDate: null, nextLabel: null, nextActs: [], gaRange: v.gaRange };
+      // คำนวณวันที่จริงของการนัดครั้งต่อไป = LMP + nextAtW สัปดาห์ + nextAtD วัน
+      const nextDate = addDays(lmp, v.nextAtW * 7 + (v.nextAtD || 0));
+      return {
+        visitNo:   v.visitNo,
+        nextDate:  nextDate,
+        nextLabel: v.nextLabel,
+        nextActs:  v.nextActs,
+        gaRange:   v.gaRange,
+        nextAtW:   v.nextAtW,
+      };
+    }
+  }
+  return null;
+}
+
+function buildNextAppt(apptId, weeks, days, lmp, isBlue) {
+  const box = document.getElementById(apptId);
+  if (!box) return;
+  box.style.display = 'none';
+  box.innerHTML = '';
+
+  const info = getVisitInfo(weeks, days, lmp);
+  if (!info || !info.nextDate) return;
+
+  const now       = new Date();
+  const daysUntil = diffDays(now, info.nextDate);
+  const isLate    = daysUntil < 0;
+  const isToday   = daysUntil === 0;
+
+  let countdownTxt, countdownColor;
+  if (isToday)       { countdownTxt = '🎉 วันนัดคือวันนี้!';               countdownColor = '#059669'; }
+  else if (isLate)   { countdownTxt = `⚠️ เลยกำหนดมาแล้ว ${Math.abs(daysUntil)} วัน`; countdownColor = '#dc2626'; }
+  else               { countdownTxt = `อีก ${daysUntil} วัน (${Math.ceil(daysUntil/7)} สัปดาห์)`; countdownColor = '#475569'; }
+
+  const accentColor = isBlue ? '#0284c7' : '#059669';
+  const bgGrad      = isBlue
+    ? 'linear-gradient(135deg,#eff6ff,#e0f2fe)'
+    : 'linear-gradient(135deg,#f0fdf4,#ecfdf5)';
+  const borderColor = isLate ? '#fca5a5' : (isBlue ? '#93c5fd' : '#6ee7b7');
+  const badgeBg     = isLate
+    ? 'linear-gradient(135deg,#dc2626,#ef4444)'
+    : (isBlue
+      ? 'linear-gradient(135deg,#0284c7,#0ea5e9)'
+      : 'linear-gradient(135deg,#059669,#0d9488)');
+
+  box.innerHTML = `
+    <div style="background:${bgGrad};border:1.5px solid ${borderColor};border-radius:14px;padding:16px 18px;margin-top:2px;">
+
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span style="font-size:1.1rem;">📅</span>
+        <span style="font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${accentColor};">
+          นัดฝากครรภ์ครั้งต่อไป — ${info.nextLabel}
+        </span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="background:${badgeBg};color:#fff;border-radius:12px;padding:10px 18px;
+                    font-size:1.15rem;font-weight:800;box-shadow:0 3px 10px rgba(0,0,0,0.15);white-space:nowrap;">
+          ${formatTH(info.nextDate)}
+        </div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:${accentColor};">
+            GA ${info.nextAtW} สัปดาห์ (นับจาก LMP)
+          </div>
+          <div style="font-size:0.8rem;color:${countdownColor};font-weight:${isLate?'700':'500'};">
+            ${countdownTxt}
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.7);border-radius:10px;padding:12px 14px;">
+        <div style="font-size:0.72rem;font-weight:700;color:#64748b;letter-spacing:0.8px;
+                    text-transform:uppercase;margin-bottom:8px;">
+          🩺 กิจกรรมการดูแลในครั้งถัดไป
+        </div>
+        ${info.nextActs.map(a => `
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;
+                      border-bottom:1px solid rgba(0,0,0,0.05);font-size:0.83rem;color:#1e293b;">
+            <div style="width:7px;height:7px;border-radius:50%;background:${accentColor};
+                        margin-top:6px;flex-shrink:0;"></div>
+            <span>${a}</span>
+          </div>`).join('')}
+      </div>
+
+      ${isLate ? `
+        <div style="margin-top:10px;background:#fff1f2;border:1px solid #fca5a5;border-radius:8px;
+                    padding:8px 12px;font-size:0.79rem;color:#991b1b;display:flex;gap:7px;">
+          <span>⚠️</span>
+          <span>วันนัดผ่านมาแล้ว — กรุณานัดหมายใหม่โดยเร็ว</span>
+        </div>` : ''}
+    </div>`;
+  box.style.display = 'block';
+}
+
+// ============================================================
+//  FULL TIMELINE
+// ============================================================
+function buildFullTimeline() {
+  const c = document.getElementById('full-timeline');
+  ANC.forEach((r,i) => {
+    const el=document.createElement('div');
+    el.className='tl-item';
+    el.innerHTML=`
+      <div class="tl-hd" style="background:${r.bg}">
+        <div class="tl-dot" style="background:${r.color};box-shadow:0 0 5px ${r.color}88"></div>
+        <span style="font-weight:700;font-size:0.83rem;color:${r.color}">${r.range}</span>
+        <span style="font-size:0.7rem;color:var(--muted);margin-left:auto">ครั้งที่ ${i+1}</span>
+      </div>
+      <div class="tl-bd">
+        ${r.acts.map(a=>`
+          <div class="tl-act-row">
+            <span style="color:${r.color};font-size:0.95rem;flex-shrink:0">›</span>
+            <span>${a.t}${!a.thai?`<span style="font-size:0.7rem;background:#fce7f3;color:#be185d;border-radius:4px;padding:1px 6px;margin-left:6px;">ต่างด้าว</span>`:''}${!a.alien&&a.thai?`<span style="font-size:0.7rem;background:#e0f2fe;color:#0284c7;border-radius:4px;padding:1px 6px;margin-left:6px;">คนไทย</span>`:''}</span>
+          </div>`).join('')}
+      </div>`;
+    c.appendChild(el);
+  });
+}
+</script>
+</body>
+</html>
