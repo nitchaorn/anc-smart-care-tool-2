@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ANC Smart Care Tool — รพ.แปลงยาว</title>
+
+<!-- PWA Meta Tags — ติดตั้งลงมือถือได้ ใช้ offline ได้ -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ANC รพ.แปลงยาว">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="ANC Smart Care">
+<meta name="theme-color" content="#BE185D">
+<meta name="description" content="ระบบคำนวณอายุครรภ์และแนะนำกิจกรรม คลินิกฝากครรภ์ รพ.แปลงยาว">
+
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -745,12 +755,12 @@ const ANC = [
       {t:'GCT in high risk (ตรวจน้ำตาลกลุ่มเสี่ยง)',                   thai:true,  alien:true},
     ]
   },
-  { range:'12+1 – 17+5 สัปดาห์',   minW:12, minD:1, maxW:17, maxD:5,
+  { range:'12+1 – 14+5 สัปดาห์',   minW:12, minD:1, maxW:14, maxD:5,
     color:'#a855f7', bg:'#faf5ff', border:'#d8b4fe',
     acts:[
       {t:'เจาะ NIPT — คนไทย (ฟรี)',                                        thai:true,  alien:false},
       {t:'เจาะ NIPT — ต่างด้าว (ยินยอมชำระเงิน 2,600 บาท)',               thai:false, alien:true},
-      {t:'⚠️ High Risk Eclampsia → เริ่ม ASA 2 เม็ด รับประทานก่อนนอน (hs)', thai:true,  alien:true, asa:true},
+      {t:'⚠️ High Risk Eclampsia → เริ่ม ASA 2 เม็ด รับประทานวันละ 1 ครั้ง ก่อนนอน (OD hs)', thai:true, alien:true, asa:true},
     ]
   },
   { range:'15 – 17+5 สัปดาห์',     minW:15, maxW:17, maxD:5,
@@ -1544,17 +1554,29 @@ const VISIT_SCHEDULE = [
     nextAtW: 12, nextAtD: 1,          // ≥ 12+1 สัปดาห์
     nextLabel: 'ครั้งที่ 2  —  GA 12+1 สัปดาห์',
     nextActs: [
-      'เจาะ NIPT (ถ้ายินยอมชำระเงิน 2,600 บาท)',
+      'เจาะ NIPT — คนไทย (ฟรี) / ต่างด้าว (ยินยอม 2,600 บาท)',
       'ตรวจครรภ์ตามมาตรฐาน',
       'ติดตามผลตรวจ LAB I',
+      'High Risk Eclampsia → เริ่ม ASA 2 เม็ด ก่อนนอน (OD hs)',
     ]
   },
   {
     visitNo: 2,
-    gaRange: '12+1 – 17+5 สัปดาห์',
-    fromW: 12, fromD: 1, toW: 17, toD: 5,
+    gaRange: '12+1 – 14+5 สัปดาห์',
+    fromW: 12, fromD: 1, toW: 14, toD: 5,
+    nextAtW: 15, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 3  —  GA 15 สัปดาห์',
+    nextActs: [
+      'เจาะ QT — คนไทย (ฟรี) / ต่างด้าว (ยินยอม 1,300 บาท)',
+      'ตรวจครรภ์ตามมาตรฐาน',
+    ]
+  },
+  {
+    visitNo: 3,
+    gaRange: '15 – 17+5 สัปดาห์',
+    fromW: 15, toW: 17, toD: 5,
     nextAtW: 18, nextAtD: 0,
-    nextLabel: 'ครั้งที่ 3  —  GA 18 สัปดาห์',
+    nextLabel: 'ครั้งที่ 4  —  GA 18 สัปดาห์',
     nextActs: [
       'U/S Cervix (อัลตราซาวด์ปากมดลูก)',
       '💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย',
@@ -1562,11 +1584,11 @@ const VISIT_SCHEDULE = [
     ]
   },
   {
-    visitNo: 3,
+    visitNo: 4,
     gaRange: '18 – 22 สัปดาห์',
     fromW: 18, toW: 22,
     nextAtW: 24, nextAtD: 0,
-    nextLabel: 'ครั้งที่ 4  —  GA 24 สัปดาห์',
+    nextLabel: 'ครั้งที่ 5  —  GA 24 สัปดาห์',
     nextActs: [
       'เจาะ GCT / OGTT (คัดกรองเบาหวาน)',
       '💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย (ถ้ายังไม่ได้ฉีด)',
@@ -1574,7 +1596,7 @@ const VISIT_SCHEDULE = [
     ]
   },
   {
-    visitNo: 4,
+    visitNo: 5,
     gaRange: '24 – 27+6 สัปดาห์',
     fromW: 24, toW: 27, toD: 6,
     nextAtW: 28, nextAtD: 0,
@@ -1652,6 +1674,25 @@ const VISIT_SCHEDULE = [
   },
 ];
 
+// ── เลื่อนวันนัดไปวันจันทร์หรืออังคารที่ใกล้ที่สุด ──────────────
+// คลินิกฝากครรภ์ รพ.แปลงยาว เปิดเฉพาะ จันทร์ (1) และอังคาร (2)
+function nextMonTue(date) {
+  const d = new Date(date);
+  const day = d.getDay(); // 0=อาทิตย์, 1=จันทร์, 2=อังคาร ...
+  if (day === 1 || day === 2) return d; // ตรงกันแล้ว
+  // หาจำนวนวันที่ต้องเลื่อนไปวันจันทร์ถัดไป
+  let daysToMon, daysTueTue;
+  if (day === 0) { daysToMon = 1; daysTueTue = 2; }       // อาทิตย์
+  else if (day === 3) { daysToMon = 5; daysTueTue = 6; }  // พุธ
+  else if (day === 4) { daysToMon = 4; daysTueTue = 5; }  // พฤหัส
+  else if (day === 5) { daysToMon = 3; daysTueTue = 4; }  // ศุกร์
+  else { daysToMon = 2; daysTueTue = 3; }                  // เสาร์
+  // เลือกวันที่ใกล้ที่สุด (จันทร์หรืออังคาร)
+  return addDays(d, Math.min(daysToMon, daysTueTue));
+}
+
+const DAYS_TH = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+
 // คืนค่า visit ปัจจุบัน + ข้อมูลนัดครั้งต่อไป
 function getVisitInfo(weeks, days, lmp) {
   const totalD = weeks * 7 + days;
@@ -1662,8 +1703,12 @@ function getVisitInfo(weeks, days, lmp) {
       : (v.toW !== undefined ? v.toW * 7 + 6 : 99999);
     if (totalD >= fromD && totalD <= toD) {
       if (v.nextAtW === null) return { visitNo: v.visitNo, nextDate: null, nextLabel: null, nextActs: [], gaRange: v.gaRange };
-      // คำนวณวันที่จริงของการนัดครั้งต่อไป = LMP + nextAtW สัปดาห์ + nextAtD วัน
-      const nextDate = addDays(lmp, v.nextAtW * 7 + (v.nextAtD || 0));
+      // คำนวณวันที่ตรงตามอายุครรภ์ก่อน
+      const rawDate  = addDays(lmp, v.nextAtW * 7 + (v.nextAtD || 0));
+      // เลื่อนไปวันจันทร์หรืออังคารที่ใกล้ที่สุด
+      const nextDate = nextMonTue(rawDate);
+      const dayName  = DAYS_TH[nextDate.getDay()];
+      const shifted  = nextDate.getTime() !== rawDate.getTime();
       return {
         visitNo:   v.visitNo,
         nextDate:  nextDate,
@@ -1671,6 +1716,9 @@ function getVisitInfo(weeks, days, lmp) {
         nextActs:  v.nextActs,
         gaRange:   v.gaRange,
         nextAtW:   v.nextAtW,
+        dayName:   dayName,       // ชื่อวัน (จันทร์/อังคาร)
+        shifted:   shifted,       // true ถ้าเลื่อนวัน
+        rawDate:   rawDate,       // วันเดิมก่อนเลื่อน
       };
     }
   }
@@ -1763,6 +1811,9 @@ function buildNextAppt(apptId, weeks, days, lmp, isBlue) {
           ${formatTH(info.nextDate)}
         </div>
         <div>
+          <div style="font-size:0.88rem;font-weight:700;color:${accentColor};">
+            วัน${info.dayName} 📅
+          </div>
           <div style="font-size:0.82rem;font-weight:600;color:${accentColor};">
             GA ${info.nextAtW} สัปดาห์ (นับจาก LMP)
           </div>
@@ -1771,6 +1822,14 @@ function buildNextAppt(apptId, weeks, days, lmp, isBlue) {
           </div>
         </div>
       </div>
+      ${info.shifted ? `
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;
+                  padding:8px 12px;font-size:0.78rem;color:#92400e;
+                  display:flex;gap:7px;align-items:flex-start;margin-bottom:12px;">
+        <span>📆</span>
+        <span>วันตามอายุครรภ์ตรงกับ <b>${DAYS_TH[info.rawDate.getDay()]}</b> (${formatTH(info.rawDate)})
+        — เลื่อนเป็นวัน<b>${info.dayName}</b>ที่ใกล้ที่สุด เนื่องจากคลินิกเปิดเฉพาะ <b>จันทร์–อังคาร</b></span>
+      </div>` : ''}
 
       <div style="background:rgba(255,255,255,0.7);border-radius:10px;padding:12px 14px;">
         <div style="font-size:0.72rem;font-weight:700;color:#64748b;letter-spacing:0.8px;
@@ -1854,6 +1913,134 @@ function buildFullTimeline() {
       <div class="tl-bd">${actLines.join('')}</div>`;
     c.appendChild(el);
   });
+}
+</script>
+<!-- ── INSTALL BANNER (แสดงครั้งแรก) ── -->
+<div id="install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(135deg,#be185d,#7c3aed);
+  color:#fff;padding:14px 18px;z-index:9999;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.2);
+  font-family:'Sarabun',sans-serif;">
+  <div style="max-width:600px;margin:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <span style="font-size:1.3rem;">📲</span>
+    <div style="flex:1;min-width:180px;">
+      <div style="font-weight:700;font-size:0.92rem;">ติดตั้งโปรแกรมลงมือถือ</div>
+      <div style="font-size:0.75rem;opacity:0.85;margin-top:1px;">ใช้งานได้แบบ Offline ไม่ต้องโหลดซ้ำ</div>
+    </div>
+    <button onclick="installApp()" style="background:#fff;color:#be185d;border:none;
+      border-radius:8px;padding:8px 16px;font-family:'Sarabun',sans-serif;
+      font-size:0.85rem;font-weight:700;cursor:pointer;flex-shrink:0;">
+      ติดตั้งเลย
+    </button>
+    <button onclick="document.getElementById('install-banner').style.display='none'"
+      style="background:rgba(255,255,255,0.2);color:#fff;border:none;
+      border-radius:8px;padding:8px 12px;font-family:'Sarabun',sans-serif;
+      font-size:0.82rem;cursor:pointer;flex-shrink:0;">
+      ปิด
+    </button>
+  </div>
+</div>
+
+<!-- iOS Install Guide Modal -->
+<div id="ios-guide" style="display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,0.6);display:none;align-items:flex-end;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 32px;
+    width:100%;max-width:480px;margin:auto;font-family:'Sarabun',sans-serif;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <span style="font-size:2rem;">📲</span>
+      <div style="font-size:1.05rem;font-weight:700;color:#be185d;margin-top:6px;">
+        ติดตั้งบน iPhone / iPad
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#fce7f3;border-radius:10px;padding:11px 13px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">1️⃣</span>
+        <div style="font-size:0.88rem;color:#1e293b;">กดปุ่ม <strong>Share</strong> (กล่องมีลูกศรชี้ขึ้น) ที่ด้านล่างของ Safari</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#f5f3ff;border-radius:10px;padding:11px 13px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">2️⃣</span>
+        <div style="font-size:0.88rem;color:#1e293b;">เลื่อนลงแล้วเลือก <strong>"Add to Home Screen"</strong> (เพิ่มไปที่หน้าจอหลัก)</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#e0f2fe;border-radius:10px;padding:11px 13px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">3️⃣</span>
+        <div style="font-size:0.88rem;color:#1e293b;">กด <strong>"Add"</strong> มุมขวาบน — โปรแกรมจะปรากฏที่หน้าจอหลักทันที ✅</div>
+      </div>
+    </div>
+    <button onclick="document.getElementById('ios-guide').style.display='none'"
+      style="width:100%;margin-top:18px;padding:12px;background:linear-gradient(135deg,#be185d,#7c3aed);
+      color:#fff;border:none;border-radius:11px;font-family:'Sarabun',sans-serif;
+      font-size:1rem;font-weight:700;cursor:pointer;">
+      เข้าใจแล้ว ✓
+    </button>
+  </div>
+</div>
+
+<script>
+// ── PWA Install Logic ──────────────────────────────────────
+let deferredPrompt = null;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isInStandalone = window.matchMedia('(display-mode: standalone)').matches
+  || window.navigator.standalone === true;
+
+// Android/Chrome: intercept install prompt
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after 3 seconds
+  setTimeout(() => {
+    if (!isInStandalone) {
+      document.getElementById('install-banner').style.display = 'block';
+    }
+  }, 3000);
+});
+
+// iOS: show guide banner
+if (isIOS && !isInStandalone) {
+  setTimeout(() => {
+    document.getElementById('install-banner').style.display = 'block';
+  }, 3000);
+}
+
+function installApp() {
+  if (deferredPrompt) {
+    // Android Chrome
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('install-banner').style.display = 'none';
+    });
+  } else if (isIOS) {
+    // iOS: show step-by-step guide
+    document.getElementById('install-banner').style.display = 'none';
+    document.getElementById('ios-guide').style.display = 'flex';
+  }
+}
+
+// ── Service Worker for Offline Cache ──────────────────────
+if ('serviceWorker' in navigator) {
+  // Inline Service Worker as blob
+  const swCode = `
+const CACHE = 'anc-v2';
+const ASSETS = [location.href];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+  ));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match(e.request)))
+  );
+});
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
 }
 </script>
 </body>
