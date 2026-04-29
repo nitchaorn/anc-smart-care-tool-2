@@ -579,7 +579,7 @@ body{
           <div class="rm-ga" id="lmp-ga-text">—</div>
           <div class="rm-sub" id="lmp-ga-sub"></div>
           <div class="rm-row">
-            <div class="rm-chip">📅 EDC : <b id="lmp-edc-val">—</b></div>
+            <div class="rm-chip">🤰 EDC : <b id="lmp-edc-val">—</b></div>
             <div class="rm-chip">⏳ เหลือ : <b id="lmp-remain-val">—</b></div>
           </div>
         </div>
@@ -680,7 +680,7 @@ body{
           <div class="rm-ga" id="edc-ga-text">—</div>
           <div class="rm-sub" id="edc-ga-sub"></div>
           <div class="rm-row">
-            <div class="rm-chip">📅 LMP : <b id="edc-lmp-val">—</b></div>
+            <div class="rm-chip">🩷 LMP : <b id="edc-lmp-val">—</b></div>
             <div class="rm-chip">⏳ เหลือ : <b id="edc-remain-val">—</b></div>
           </div>
         </div>
@@ -776,7 +776,7 @@ const ANC = [
     acts:[
       {t:'U/S Cervix (อัลตราซาวด์ปากมดลูก)',                    thai:true,  alien:true},
       {t:'💉 ฉีดวัคซีน Flu (ไข้หวัดใหญ่) — คนไทย',              thai:true,  alien:false},
-      {t:'⚠️ Hx. Previous C/S → Refer รพ.พุทธสาคร',             thai:true,  alien:true, special:true},
+      {t:'⚠️ Hx. Previous C/S → Refer รพ.พุทธโสธร',             thai:true,  alien:true, special:true},
     ]
   },
   { range:'24 – 28 สัปดาห์',       minW:24, maxW:28,
@@ -787,18 +787,26 @@ const ANC = [
       {t:'💉 ฉีด Flu (ถ้ายังไม่ได้ฉีด) — คนไทย',                thai:true,  alien:false},
     ]
   },
-  { range:'28 – 32 สัปดาห์',       minW:28, maxW:32,
+  { range:'28 – 31+6 สัปดาห์',     minW:28, maxW:31, maxD:6,
     color:'#0891b2', bg:'#ecfeff', border:'#a5f3fc',
     acts:[
       {t:'Repeat LAB II',                                         thai:true, alien:true},
       {t:'เข้าโรงเรียนพ่อแม่ครั้งที่ 2 / เยี่ยมชมห้องคลอด',    thai:true, alien:true},
       {t:'💉 ฉีด aP (ป้องกันไอกรน) — คนไทย',                    thai:true, alien:false},
       {t:'💉 ฉีด Flu (ถ้ายังไม่ได้ฉีด) — คนไทย',                thai:true, alien:false},
-      {t:'🔵 GA 28 สัปดาห์ ถ้า Hep.B (+) → เริ่ม TAF/TDF หลังทานยาครบ 4 สัปดาห์ → เจาะ BUN, Cr', thai:true, alien:true, special:true},
-      {t:'GDM GA ≥ 32 สัปดาห์ → ส่ง NST ทุก visit',             thai:true, alien:true, dm:true},
+      {t:'🔵 GA 28 สัปดาห์ ถ้า Hep.B (+) → เริ่ม TAF/TDF จนถึง 4 สัปดาห์หลังคลอด → หลังทานยาครบ 4 สัปดาห์ → เจาะ BUN, Cr', thai:true, alien:true, special:true},
+      {t:'GDM GA 32 สัปดาห์ขึ้นไป → ส่ง NST ทุก visit',        thai:true, alien:true, dm:true},
     ]
   },
-  { range:'35 – 36 สัปดาห์',       minW:35, maxW:36,
+  { range:'32 – 34+6 สัปดาห์',     minW:32, maxW:34, maxD:6,
+    color:'#6366f1', bg:'#eef2ff', border:'#c7d2fe',
+    acts:[
+      {t:'ฟังผล LAB II',                                          thai:true, alien:true},
+      {t:'เข้าโรงเรียนพ่อแม่ครั้งที่ 2 / เยี่ยมชมห้องคลอด (ถ้ายังไม่ได้เข้า)', thai:true, alien:true},
+      {t:'GDM GA 32 สัปดาห์ขึ้นไป → ส่ง NST ทุก visit',        thai:true, alien:true, dm:true},
+    ]
+  },
+  { range:'35 – 36+6 สัปดาห์',     minW:35, maxW:36, maxD:6,
     color:'#be185d', bg:'#fff1f2', border:'#fecdd3',
     acts:[
       {t:'U/S ส่วนนำ (ตรวจท่าทารก)',                             thai:true, alien:true},
@@ -815,7 +823,8 @@ const ANC = [
   { range:'38 – 38+6 สัปดาห์',     minW:38, maxW:38, maxD:6,
     color:'#059669', bg:'#ecfdf5', border:'#a7f3d0',
     acts:[
-      {t:'PV กระตุ้น',                                            thai:true, alien:true},
+      {t:'PV กระตุ้น',                                                                                          thai:true, alien:true},
+      {t:'🚫 <span style="color:#dc2626;font-weight:800;font-size:1em;">ห้าม!!! PV กระตุ้น — Hx. Previous C/S</span>', thai:true, alien:true, warn:true},
     ]
   },
   { range:'39 – 39+6 สัปดาห์',     minW:39, maxW:39, maxD:6,
@@ -828,7 +837,7 @@ const ANC = [
     color:'#dc2626', bg:'#fff1f2', border:'#fca5a5',
     acts:[
       {t:'PV กระตุ้น + ประเมิน Bishop Score + NST',              thai:true, alien:true},
-      {t:'🔴 นัด Induction of Labor (กระตุ้นคลอด)',               thai:true, alien:true},
+      {t:'🔴 <span style="color:#dc2626;font-weight:800;">นัด Induction of Labor</span><br><span style="color:#dc2626;font-weight:700;">📋 NPO หลังเที่ยงคืน &nbsp;|&nbsp; ยื่นบัตร ER เวลา 06.00–06.30 น.</span>', thai:true, alien:true, warn:true},
     ]
   },
 ];
@@ -1051,12 +1060,18 @@ function toggleASA(panel) {
     document.getElementById('lmp-asa-check').textContent = lmpASA ? '✓' : '';
     document.getElementById('lmp-asa-check').style.color = '#fff';
     calcASA('lmp');
+    // rebuild วันนัดใหม่ทันที (ASA → วันอังคารเท่านั้น)
+    const lmpObj = getLMPFromPanel('lmp');
+    if (lmpObj) buildNextAppt('lmp-next-appt', lmpObj.weeks, lmpObj.days, lmpObj.lmp, false);
   } else {
     edcASA = !edcASA;
     document.getElementById('edc-asa-row').classList.toggle('active', edcASA);
     document.getElementById('edc-asa-check').textContent = edcASA ? '✓' : '';
     document.getElementById('edc-asa-check').style.color = '#fff';
     calcASA('edc');
+    // rebuild วันนัดใหม่ทันที (ASA → วันอังคารเท่านั้น)
+    const lmpObj = getLMPFromPanel('edc');
+    if (lmpObj) buildNextAppt('edc-next-appt', lmpObj.weeks, lmpObj.days, lmpObj.lmp, true);
   }
 }
 
@@ -1112,8 +1127,8 @@ function calcASA(panel) {
     return;
   }
 
-  // คำนวณวันนัดครั้งต่อไป
-  const visitInfo = getVisitInfo(weeks, days, lmp);
+  // คำนวณวันนัดครั้งต่อไป (ASA = High Risk → วันอังคารเท่านั้น)
+  const visitInfo = getVisitInfo(weeks, days, lmp, true);
   if (!visitInfo || !visitInfo.nextDate) return;
 
   const now           = new Date();
@@ -1523,9 +1538,9 @@ function buildActsPanel(containerId, panelId, weeks, days, nat) {
       </div>
       <div class="act-group-bd">
         ${acts.map(a=>`
-          <div class="act-item">
-            <div class="act-dot" style="background:${r.color}"></div>
-            <span style="color:${a.dm?'#b45309':'inherit'}">${a.t}</span>
+          <div class="act-item" style="${a.warn ? 'background:#fff1f2;border-radius:8px;padding:6px 10px;border:1.5px solid #fca5a5;' : ''}">
+            <div class="act-dot" style="background:${a.warn ? '#dc2626' : r.color};${a.warn ? 'width:8px;height:8px;' : ''}"></div>
+            <span style="color:${a.warn ? '#dc2626' : (a.dm?'#b45309':'inherit')};font-weight:${a.warn ? '700' : '400'};">${a.t}</span>
           </div>`).join('')}
       </div>`;
     container.appendChild(g);
@@ -1614,18 +1629,31 @@ const VISIT_SCHEDULE = [
   },
   {
     visitNo: 6,
-    gaRange: '28 – 34+6 สัปดาห์',
-    fromW: 28, toW: 34, toD: 6,
-    nextAtW: 35, nextAtD: 0,
-    nextLabel: 'ครั้งที่ 7  —  GA 35 – 36+6 สัปดาห์',
+    gaRange: '28 – 31+6 สัปดาห์',
+    fromW: 28, toW: 31, toD: 6,
+    nextAtW: 32, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 6b  —  GA 32 – 34+6 สัปดาห์',
     nextActs: [
-      'U/S ส่วนนำ (ตรวจท่าทารก)',
-      'ตรวจครรภ์ตามมาตรฐาน',
-      'GDM → NST ทุก visit',
+      'ฟังผล LAB II',
+      'เข้าโรงเรียนพ่อแม่ครั้งที่ 2 / เยี่ยมชมห้องคลอด (ถ้ายังไม่ได้เข้า)',
+      'GDM → ส่ง NST ทุก visit ตั้งแต่ GA 32 สัปดาห์',
     ]
   },
   {
     visitNo: 7,
+    gaRange: '32 – 34+6 สัปดาห์',
+    fromW: 32, toW: 34, toD: 6,
+    nextAtW: 35, nextAtD: 0,
+    nextLabel: 'ครั้งที่ 7  —  GA 35 – 36+6 สัปดาห์',
+    nextActs: [
+      'U/S ส่วนนำ (ตรวจท่าทารก)',
+      '💉 ฉีด Flu (ถ้ายังไม่ได้ฉีด) — คนไทย',
+      '⛔ GA 36 สัปดาห์ → หยุดยา ASA (Off ASA)',
+      'GDM → NST ทุก visit',
+    ]
+  },
+  {
+    visitNo: 8,
     gaRange: '35 – 36+6 สัปดาห์',
     fromW: 35, toW: 36, toD: 6,
     nextAtW: 37, nextAtD: 0,
@@ -1636,7 +1664,7 @@ const VISIT_SCHEDULE = [
     ]
   },
   {
-    visitNo: 8,
+    visitNo: 9,
     gaRange: '37 – 37+6 สัปดาห์',
     fromW: 37, toW: 37, toD: 6,
     nextAtW: 38, nextAtD: 0,
@@ -1694,10 +1722,22 @@ function nextMonTue(date) {
   return addDays(d, Math.min(daysToMon, daysTueTue));
 }
 
+// ── เลื่อนวันนัดไปวันอังคารที่ใกล้ที่สุด (สำหรับ High Risk / ASA) ──
+// คลินิก High Risk เปิดเฉพาะวันอังคาร
+function nextTuesdayOnly(date) {
+  const d = new Date(date);
+  const day = d.getDay(); // 0=อาทิตย์, 2=อังคาร ...
+  if (day === 2) return d; // ตรงกันแล้ว
+  // คำนวณวันอังคารถัดไป
+  const daysToTue = (2 - day + 7) % 7 || 7; // ถ้า day=2 → 0 แต่ใช้ 7 แทน (อาทิตย์หน้า)
+  return addDays(d, daysToTue);
+}
+
 const DAYS_TH = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
 
 // คืนค่า visit ปัจจุบัน + ข้อมูลนัดครั้งต่อไป
-function getVisitInfo(weeks, days, lmp) {
+// isASA: ถ้าเป็น true → บังคับเป็นวันอังคาร (คลินิก High Risk)
+function getVisitInfo(weeks, days, lmp, isASA) {
   const totalD = weeks * 7 + days;
   for (const v of VISIT_SCHEDULE) {
     const fromD = (v.fromW || 0) * 7 + (v.fromD || 0);
@@ -1708,8 +1748,9 @@ function getVisitInfo(weeks, days, lmp) {
       if (v.nextAtW === null) return { visitNo: v.visitNo, nextDate: null, nextLabel: null, nextActs: [], gaRange: v.gaRange };
       // คำนวณวันที่ตรงตามอายุครรภ์ก่อน
       const rawDate  = addDays(lmp, v.nextAtW * 7 + (v.nextAtD || 0));
-      // เลื่อนไปวันจันทร์หรืออังคารที่ใกล้ที่สุด
-      const nextDate = nextMonTue(rawDate);
+      // ถ้า ASA (High Risk) → เลื่อนไปวันอังคารเท่านั้น
+      // ถ้าปกติ → เลื่อนไปวันจันทร์หรืออังคารที่ใกล้ที่สุด
+      const nextDate = isASA ? nextTuesdayOnly(rawDate) : nextMonTue(rawDate);
       const dayName  = DAYS_TH[nextDate.getDay()];
       const shifted  = nextDate.getTime() !== rawDate.getTime();
       return {
@@ -1722,6 +1763,7 @@ function getVisitInfo(weeks, days, lmp) {
         dayName:   dayName,       // ชื่อวัน (จันทร์/อังคาร)
         shifted:   shifted,       // true ถ้าเลื่อนวัน
         rawDate:   rawDate,       // วันเดิมก่อนเลื่อน
+        isASA:     isASA || false, // High Risk flag
       };
     }
   }
@@ -1734,7 +1776,11 @@ function buildNextAppt(apptId, weeks, days, lmp, isBlue) {
   box.style.display = 'none';
   box.innerHTML = '';
 
-  const info = getVisitInfo(weeks, days, lmp);
+  // ดูสถานะ ASA จาก panel
+  const panel  = apptId.startsWith('lmp') ? 'lmp' : 'edc';
+  const isASA  = panel === 'lmp' ? lmpASA : edcASA;
+
+  const info = getVisitInfo(weeks, days, lmp, isASA);
   if (!info || !info.nextDate) return;
 
   const now       = new Date();
@@ -1743,8 +1789,6 @@ function buildNextAppt(apptId, weeks, days, lmp, isBlue) {
   const isToday   = daysUntil === 0;
 
   // ── เพิ่ม dT reminder เข้า nextActs ──────────────────────────────
-  // panel = lmp หรือ edc ดูจาก apptId
-  const panel   = apptId.startsWith('lmp') ? 'lmp' : 'edc';
   const dtState = panel === 'lmp' ? lmpDT : edcDT;
   // คำนวณวันฉีดเข็ม 2 และ 3 (จากวันนี้ซึ่งเป็นวันฉีดเข็ม 1)
   const dose2Date = addDays(now, 30);
@@ -1832,13 +1876,16 @@ function buildNextAppt(apptId, weeks, days, lmp, isBlue) {
           </div>
         </div>
       </div>
-      ${info.shifted ? `
-      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;
-                  padding:8px 12px;font-size:0.78rem;color:#92400e;
+      ${info.shifted || isASA ? `
+      <div style="background:${isASA ? '#fff0f0' : '#fff7ed'};border:1px solid ${isASA ? '#fca5a5' : '#fed7aa'};border-radius:8px;
+                  padding:8px 12px;font-size:0.78rem;color:${isASA ? '#991b1b' : '#92400e'};
                   display:flex;gap:7px;align-items:flex-start;margin-bottom:12px;">
-        <span>📌</span>
-        <span>วันตามอายุครรภ์ตรงกับ <b>${DAYS_TH[info.rawDate.getDay()]}</b> (${formatTH(info.rawDate)})
-        — เลื่อนเป็นวัน<b>${info.dayName}</b>ที่ใกล้ที่สุด เนื่องจากคลินิกเปิดเฉพาะ <b>จันทร์–อังคาร</b></span>
+        <span>${isASA ? '🔴' : '📌'}</span>
+        <span>${isASA
+          ? `<b>High Risk — คลินิก High Risk เปิดเฉพาะวันอังคาร</b><br>วันนัดถูกปรับเป็น<b>วันอังคาร</b>ที่ใกล้ที่สุดโดยอัตโนมัติ (${formatTH(info.nextDate)})`
+          : `วันตามอายุครรภ์ตรงกับ <b>${DAYS_TH[info.rawDate.getDay()]}</b> (${formatTH(info.rawDate)})
+        — เลื่อนเป็นวัน<b>${info.dayName}</b>ที่ใกล้ที่สุด เนื่องจากคลินิกเปิดเฉพาะ <b>จันทร์–อังคาร</b>`}
+        </span>
       </div>` : ''}
 
       <div style="background:rgba(255,255,255,0.7);border-radius:10px;padding:12px 14px;">
@@ -1890,10 +1937,11 @@ function buildFullTimeline() {
     r.acts.forEach(a => {
       const key = a.t;
       if (!seen[key]) {
-        seen[key] = { thai: a.thai, alien: a.alien };
+        seen[key] = { thai: a.thai, alien: a.alien, warn: a.warn || false };
       } else {
         seen[key].thai  = seen[key].thai  || a.thai;
         seen[key].alien = seen[key].alien || a.alien;
+        seen[key].warn  = seen[key].warn  || a.warn || false;
       }
     });
 
@@ -1907,10 +1955,14 @@ function buildFullTimeline() {
       } else if (!flags.thai && flags.alien) {
         badge = `<span style="font-size:0.7rem;background:#fce7f3;color:#be185d;border-radius:4px;padding:1px 6px;margin-left:6px;">ต่างด้าว</span>`;
       }
+      const warnStyle = flags.warn
+        ? `background:#fff1f2;border:1.5px solid #fca5a5;border-radius:8px;padding:5px 10px;margin:3px 0;`
+        : '';
+      const textStyle = flags.warn ? `color:#dc2626;font-weight:700;` : '';
       actLines.push(`
-        <div class="tl-act-row">
-          <span style="color:${r.color};font-size:0.95rem;flex-shrink:0">›</span>
-          <span>${text}${badge}</span>
+        <div class="tl-act-row" style="${warnStyle}">
+          <span style="color:${flags.warn ? '#dc2626' : r.color};font-size:0.95rem;flex-shrink:0">›</span>
+          <span style="${textStyle}">${text}${badge}</span>
         </div>`);
     });
 
